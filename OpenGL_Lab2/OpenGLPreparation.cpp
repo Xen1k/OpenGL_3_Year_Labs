@@ -32,7 +32,6 @@ void RecalculateIndicies();
 #pragma region Shapes
 void SetRightTriangleVerticies()
 {
-	vertices.clear();
 	vertices = { 0.f, 0.f, 0.f, 0.5f, 0.f, 0.f, 0.f, 0.5f, 0.f };
 	RecalculateIndicies();
 	RefreshMesh();
@@ -40,7 +39,6 @@ void SetRightTriangleVerticies()
 
 void SetIsoscelesTriangleVertices()
 {
-	vertices.clear();
 	vertices = { -0.5f, 0.f, 0.f, 0.5f, 0.f, 0.f, 0.f, 0.5f, 0.f };
 	RecalculateIndicies();
 	RefreshMesh();
@@ -48,7 +46,6 @@ void SetIsoscelesTriangleVertices()
 
 void SetIsoscelesTrapezoidVertices()
 {
-	vertices.clear();
 	vertices = { -0.5f, 0.f, 0.f, -0.3f, 0.5f, 0.f, 0.3f, 0.5f, 0.f, 0.5f, 0.0f, 0.f };
 	RecalculateIndicies();
 	RefreshMesh();
@@ -56,7 +53,6 @@ void SetIsoscelesTrapezoidVertices()
 
 void SetRightTrapezoidVertices()
 {
-	vertices.clear();
 	vertices = { -0.5f, 0.f, 0.f, -0.5f, 0.5f, 0.f, 0.3f, 0.5f, 0.f, 0.5f, 0.0f, 0.f };
 	RecalculateIndicies();
 	RefreshMesh();
@@ -64,7 +60,6 @@ void SetRightTrapezoidVertices()
 
 void SetParallelogramVertices()
 {
-	vertices.clear();
 	vertices = { -0.5f, 0.f, 0.f, -0.3f, 0.5f, 0.f, 0.8f, 0.5f, 0.f, 0.5f, 0.0f, 0.f };
 	RecalculateIndicies();
 	RefreshMesh();
@@ -72,7 +67,6 @@ void SetParallelogramVertices()
 
 void SetRectangleVertices()
 {
-	vertices.clear();
 	vertices = { -0.5f, 0.f, 0.f, -0.5f, 0.3f, 0.f, 0.5f, 0.3f, 0.f, 0.5f, 0.0f, 0.f };
 	RecalculateIndicies();
 	RefreshMesh();
@@ -80,7 +74,6 @@ void SetRectangleVertices()
 
 void SetDeltoidVertices()
 {
-	vertices.clear();
 	vertices = { 0.f, -0.5f, 0.f, -0.3f, 0.f, 0.f, 0.f, 0.3f, 0.f, 0.3f, 0.0f, 0.f };
 	RecalculateIndicies();
 	RefreshMesh();
@@ -88,7 +81,6 @@ void SetDeltoidVertices()
 
 void SetRhombusVertices()
 {
-	vertices.clear();
 	vertices = { 0.f, -0.7f, 0.f, -0.3f, 0.f, 0.f, 0.f, 0.7f, 0.f, 0.3f, 0.0f, 0.f };
 	RecalculateIndicies();
 	RefreshMesh();
