@@ -24,6 +24,5 @@ out vec4 FragColor;
 
 void main()
 {
-	FragColor = new vec4(color - position, 1);
-	//FragColor = new vec4(position.x, position.y, position.z, 1);
+	FragColor = vec4(color - position, 1);
 }

@@ -20,7 +20,7 @@ void Camera::UpdateMatrix(float FOVdeg, float nearPlane, float farPlane, Shader&
 	view = glm::lookAt(position, position + orientation, up);
 	//// Adds perspective to the scene
 	if(projection == Projection::Ortho)
-		projectionMatrix = glm::ortho(-1.f, 1.f, -1.f, 1.f, nearPlane, farPlane);
+		projectionMatrix = glm::ortho(-5.f, 5.f, -5.f, 5.f, nearPlane, farPlane);
 	else
 		projectionMatrix = glm::perspective(glm::radians(FOVdeg), (float)width / height, nearPlane, farPlane);
 

@@ -62,248 +62,95 @@ void SetRhombusVertices()
 
 float CalculateHyperboloidY(float x, float z, float a, float b, float c) { return  b * sqrt(z * z / (c * c) - x * x / (a * a) - 1); }
 
+/// <summary>
+/// Adds vertices for hyberboloid. Necessary for drawing two sheets of hyperboloid.
+/// </summary>
+/// <returns>
+/// Num of added vertices
+/// </returns>
+int AddTwoSheetedHyperboloidVertices(int zFactor, float a, float b, float c, int firstVertexNumber = 0)
+{
+
+	//		\     |     /
+	//		 \    |- h /
+	//		  \	  |   /
+	//		   \__|__/ - ellipsis with r1 and r2 axises (x , y)
+
+	int numOfAddedVertices = 0;
+	int numOfHIterations = 0;
+	float x, y;
+	float r1, r2;
+	int ellipsisSubdivision = 10;
+	bool firstPoint = true;
+	
+	for (float h = c; h < 3; h += 0.3f)
+	{
+		r1 = a * sqrt(h * h / (c * c) - 1);
+		r2 = b * sqrt(h * h / (c * c) - 1);
+		if (isnan(r1) || isnan(r2))
+			continue;
+
+		numOfHIterations++;
+
+		for (int i = 0; i < ellipsisSubdivision; i++)
+		{
+			x = cos(360.f / ellipsisSubdivision * i * 3.14159f / 180) * r1;
+			y = sin(360.f / ellipsisSubdivision * i * 3.14159f / 180) * r2;
+
+			vertices.push_back(x);
+			vertices.push_back(y);
+			vertices.push_back(h * zFactor);
+			numOfAddedVertices += 1;
+
+			if (firstPoint)
+			{
+				firstPoint = false;
+				break;
+			}
+		}
+	}
+
+	// First layer
+	for (int i = 1 + firstVertexNumber; i < ellipsisSubdivision + firstVertexNumber; i++)
+	{
+		indices.push_back(firstVertexNumber);
+		indices.push_back(i);
+		indices.push_back(i + 1);
+
+	}
+	indices.push_back(firstVertexNumber);
+	indices.push_back(ellipsisSubdivision + firstVertexNumber);
+	indices.push_back(1 + firstVertexNumber);
+
+	// Other layers
+	for (int i = firstVertexNumber; i < ellipsisSubdivision * (numOfHIterations - 2) + firstVertexNumber; i++)
+	{
+		indices.push_back(i);
+		indices.push_back(i + 1);
+		indices.push_back(i + ellipsisSubdivision);
+
+		indices.push_back(i + 1);
+		indices.push_back(i + ellipsisSubdivision);
+		indices.push_back(i + ellipsisSubdivision + 1);
+	}
+	indices.push_back(ellipsisSubdivision * (numOfHIterations - 2) + firstVertexNumber);
+	indices.push_back(ellipsisSubdivision * (numOfHIterations - 2) + 1 + firstVertexNumber);
+	indices.push_back(ellipsisSubdivision * (numOfHIterations - 2) + ellipsisSubdivision + firstVertexNumber);
+
+
+	return numOfAddedVertices;
+}
+
 void SetTwoSheetedHyperboloidVertices()
 {
 	float a = 0.5f, b = 0.5f, c = 1.f;
-	float y;
-	float subdivision = 0.1f;
-	float zSubdivision = 0.3f;
+
 	vertices.clear();
-	//for (float x = 0; x <= a * 2; x += subdivision)
-	//{
-	//	for (float z = c; z <= 2 * c; z += zSubdivision)
-	//	{
-	//		y = b * sqrt(z * z / (c * c) - x * x / (a * a) - 1);
-	//		//y = sqrt((a * a - x * x) * b * b / (a * a));
-	//		vertices.push_back(x);
-	//		vertices.push_back(y);
-	//		vertices.push_back(z);
-
-	//		vertices.push_back(x);
-	//		vertices.push_back(-y);
-	//		vertices.push_back(z);
-
-	//		vertices.push_back(-x);
-	//		vertices.push_back(y);
-	//		vertices.push_back(z);
-
-	//		vertices.push_back(-x);
-	//		vertices.push_back(-y);
-	//		vertices.push_back(z);
-
-	//	}
-
-	//}
-	float maxX = a;
-	float maxZ = c + 5 * zSubdivision;
-
-	vector<GLfloat> vertices1, vertices2, vertices3, vertices4;
-
-	//float maxZ = c + 3 * zSubdivision;
-	for (float x = 0; x < maxX; x += subdivision)
-	{
-		for (float z = c; z <= maxZ; z += zSubdivision)
-		{
-			y = CalculateHyperboloidY(x, z, a, b, c);
-
-			if (isnan(y))
-				continue;
-
-			vertices.push_back(x);
-			vertices.push_back(y);
-			vertices.push_back(-z);
-
-		}
-	}
-
-	for (float x = maxX - subdivision; x >= subdivision; x -= subdivision)
-	{
-		for (float z = c; z <= maxZ; z += zSubdivision)
-		{
-			y = CalculateHyperboloidY(x, z, a, b, c);
-			if (isnan(y))
-				continue;
-			vertices.push_back(x);
-			vertices.push_back(-y);
-			vertices.push_back(-z);
-		}
-	}
-
-	for (float x = subdivision; x < maxX; x += subdivision)
-	{
-		for (float z = c; z <= maxZ; z += zSubdivision)
-		{
-			y = CalculateHyperboloidY(x, z, a, b, c);
-			if (isnan(y))
-				continue;
-			vertices.push_back(-x);
-			vertices.push_back(-y);
-			vertices.push_back(-z);
-		}
-	}
-
-	for (float x = maxX - subdivision; x >= subdivision; x -= subdivision)
-	{
-		for (float z = c; z <= maxZ; z += zSubdivision)
-		{
-			y = CalculateHyperboloidY(x, z, a, b, c);
-			if (isnan(y))
-				continue;
-			vertices.push_back(-x);
-			vertices.push_back(y);
-			vertices.push_back(-z);
-		}
-	}
 	indices.clear();
-
-	for (int i = 0; i < vertices.size(); i += 3)
-	{
-		cout << "| " << vertices[i] << ", " << vertices[i + 1] << ", " << vertices[i + 2] << " |" << std::endl;
-	}
-	cout << (float)vertices.size() / 3;
-
-	// First Layer indicies
-	for (int i = 0; i < (maxX / subdivision - 1) * 4; i++)
-	{
-		indices.push_back(0);
-		indices.push_back(1 + (maxZ - c) / zSubdivision * i);
-		indices.push_back(1 + (maxZ - c) / zSubdivision * (i + 1));
-	}
-	indices.push_back(0);
-	indices.push_back(1);
-	indices.push_back(1 + (maxZ - c) / zSubdivision * (maxX / subdivision - 1) * 4);
-
-	if (indices.size() == 0)
-		for (int i = 0; i < vertices.size() / 3 - 1; i++)
-		{
-			indices.push_back(i);
-			indices.push_back(i + 1);
-			indices.push_back(i + 2);
-		}
+	AddTwoSheetedHyperboloidVertices(-1, a, b, c, AddTwoSheetedHyperboloidVertices(1, a, b, c));
 
 	RefreshMesh();
 }
-//void SetTwoSheetedHyperboloidVertices()
-//{
-//	float a = 0.5f, b = 0.5f, c = 1.f;
-//	float y;
-//	float subdivision = 0.1f;
-//	float zSubdivision = 0.3f;
-//	vertices.clear();
-//	//for (float x = 0; x <= a * 2; x += subdivision)
-//	//{
-//	//	for (float z = c; z <= 2 * c; z += zSubdivision)
-//	//	{
-//	//		y = b * sqrt(z * z / (c * c) - x * x / (a * a) - 1);
-//	//		//y = sqrt((a * a - x * x) * b * b / (a * a));
-//	//		vertices.push_back(x);
-//	//		vertices.push_back(y);
-//	//		vertices.push_back(z);
-//
-//	//		vertices.push_back(x);
-//	//		vertices.push_back(-y);
-//	//		vertices.push_back(z);
-//
-//	//		vertices.push_back(-x);
-//	//		vertices.push_back(y);
-//	//		vertices.push_back(z);
-//
-//	//		vertices.push_back(-x);
-//	//		vertices.push_back(-y);
-//	//		vertices.push_back(z);
-//
-//	//	}
-//
-//	//}
-//	float maxX = a;
-//	float maxZ = c + 5 * zSubdivision;
-//
-//	vector<GLfloat> vertices1, vertices2, vertices3, vertices4;
-//
-//	//float maxZ = c + 3 * zSubdivision;
-//	for (float z = c; z <= maxZ; z += zSubdivision)
-//	{
-//		for (float x = 0; x < maxX * z; x += subdivision)
-//		{
-//			y = CalculateHyperboloidY(x, z, a, b, c);
-//
-//			if (isnan(y))
-//				continue;
-//
-//			vertices.push_back(x);
-//			vertices.push_back(y);
-//			vertices.push_back(-z);
-//
-//		}
-//	}
-//
-//	for (float z = c; z <= maxZ; z += zSubdivision)
-//	{
-//		for (float x = maxX - subdivision; x >= subdivision; x -= subdivision)
-//		{
-//			y = CalculateHyperboloidY(x, z, a, b, c);
-//			if (isnan(y))
-//				continue;
-//			vertices.push_back(x);
-//			vertices.push_back(-y);
-//			vertices.push_back(-z);
-//		}
-//	}
-//
-//	for (float z = c; z <= maxZ; z += zSubdivision)
-//	{
-//		for (float x = subdivision; x < maxX; x += subdivision)
-//		{
-//			y = CalculateHyperboloidY(x, z, a, b, c);
-//			if (isnan(y))
-//				continue;
-//			vertices.push_back(-x);
-//			vertices.push_back(-y);
-//			vertices.push_back(-z);
-//		}
-//	}
-//
-//	for (float z = c; z <= maxZ; z += zSubdivision)
-//	{
-//		for (float x = maxX - subdivision; x >= subdivision; x -= subdivision)
-//		{
-//			y = CalculateHyperboloidY(x, z, a, b, c);
-//			if (isnan(y))
-//				continue;
-//			vertices.push_back(-x);
-//			vertices.push_back(y);
-//			vertices.push_back(-z);
-//		}
-//	}
-//	indices.clear();
-//
-//	for (int i = 0; i < vertices.size(); i += 3)
-//	{
-//		cout << "| " << vertices[i] << ", " << vertices[i + 1] << ", " << vertices[i + 2] << " |" << std::endl;
-//	}
-//	cout << (float)vertices.size() / 3;
-//
-//	// First Layer indicies
-//	//for (int i = 0; i < (maxX / subdivision - 1) * 4; i++)
-//	//{
-//	//	indices.push_back(0);
-//	//	indices.push_back(1 + (maxZ - c) / zSubdivision * i);
-//	//	indices.push_back(1 + (maxZ - c) / zSubdivision * (i + 1));
-//	//}
-//	//indices.push_back(0);
-//	//indices.push_back(1);
-//	//indices.push_back(1 + (maxZ - c) / zSubdivision * (maxX / subdivision - 1) * 4);
-//
-//	if (indices.size() == 0)
-//		for (int i = 0; i < vertices.size() / 3 - 1; i++)
-//		{
-//			indices.push_back(i);
-//			indices.push_back(i + 1);
-//			indices.push_back(i + 2);
-//		}
-//
-//	RefreshMesh();
-//}
 
 void RenderTree(int numOfCylinders)
 {
