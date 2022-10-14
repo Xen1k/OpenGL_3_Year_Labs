@@ -272,7 +272,7 @@ int main()
 		ImGui::NewFrame();
 
 		ImGui::Begin("Figures");
-		isHoveringOverFiguresGui = ImGui::IsWindowFocused();
+		isHoveringOverFiguresGui = ImGui::IsWindowFocused() || ImGui::IsWindowHovered();
 		if (ImGui::Button("Right Triangle"))
 			SetRightTriangleVerticies();
 		else if (ImGui::Button("Rectangle"))
@@ -289,7 +289,7 @@ int main()
 		ImGui::End();
 
 		ImGui::Begin("Edit");
-		isHoveringOverEditGui = ImGui::IsWindowFocused();
+		isHoveringOverEditGui = ImGui::IsWindowFocused() || ImGui::IsWindowHovered();
 		if (ImGui::Button("Switch Rotation"))
 			rotateFigure = !rotateFigure;
 		else if (ImGui::Button("Switch Colors"))

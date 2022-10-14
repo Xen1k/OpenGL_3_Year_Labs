@@ -29,6 +29,6 @@ public:
 	Camera(int width, int height, glm::vec3 position);
 
 	void UpdateMatrix(float fovDeg, float nearPlane, float farPlane, Shader &shader, const char* uniform, Projection projection = Projection::Perspective );
-	void HandleInputs(GLFWwindow *window, bool stopMouseWindow = false);
+	void HandleInputs(GLFWwindow *window, bool stopMouseInput = false);
 };
 

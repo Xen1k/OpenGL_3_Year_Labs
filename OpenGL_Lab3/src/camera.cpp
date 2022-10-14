@@ -30,7 +30,7 @@ void Camera::UpdateMatrix(float FOVdeg, float nearPlane, float farPlane, Shader&
 
 
 
-void Camera::HandleInputs(GLFWwindow* window, bool stopMouseWindow)
+void Camera::HandleInputs(GLFWwindow* window, bool stopMouseInput)
 {
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		position += Time::GetDeltaTime() * speed * orientation;
@@ -46,7 +46,7 @@ void Camera::HandleInputs(GLFWwindow* window, bool stopMouseWindow)
 		position += Time::GetDeltaTime() * speed * -up;
 	
 
-	if (stopMouseWindow)
+	if (stopMouseInput)
 		return;
 
 	// Handles mouse inputs
