@@ -259,7 +259,7 @@ int main()
 void RecalculateIndicies()
 {
 	indices.clear();
-	for (int i = 0; i < vertices.size() / 3 - 1; i++)
+	for (int i = 0; i < vertices.size() / 3 - 2; i++)
 	{
 		indices.push_back(0);
 		indices.push_back(i + 1);
